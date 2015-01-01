@@ -7,6 +7,9 @@
 tpb-search
 *.o
 
+# xmls
+*.xml
+
 # ycm files
 .ycm_extra_conf.py*
 
