@@ -20,14 +20,15 @@ static void end_torrent(struct tpb_parser_state_t *state)
         // if matched, copy torrent to output list
         struct torrent_t *torrent = malloc(sizeof(struct torrent_t));
         memcpy(torrent, &state->current_torrent, sizeof(struct torrent_t));
-        state->torrents = list_create(torrent, state->torrents);
+
+        state->torrents = list_create(torrent, state->torrents);;
     } else {
         // otherwise, free strings memory
         xmlFree((void *) state->current_torrent.title);
         xmlFree((void *) state->current_torrent.magnet);
     }
 
-    memset(&state->current_torrent, 0,  sizeof(struct torrent_t));
+    memset(&state->current_torrent, 0, sizeof(struct torrent_t));
 }
 
 static void end_id(struct tpb_parser_state_t *state)

@@ -3,12 +3,11 @@
 #include <stdlib.h>
 #include <string.h>
 
-// TODO: later add case-insensitive substring matching
 static bool filter_substring_match(struct filter_t *filter, const xmlChar *str)
 {
     struct filter_substring_t *filter_substr =
         (struct filter_substring_t *) filter;
-    return xmlStrstr(str, filter_substr->substr) != NULL;
+    return xmlStrcasestr(str, filter_substr->substr) != NULL;
 }
 
 static void filter_substring_free(struct filter_t *filter)

@@ -5,13 +5,17 @@
 
 int main(int argc, char **argv)
 {
-    struct filter_t *filter = filter_substring_create("Gogol");
+    if (argc < 3) {
+        fprintf(stderr, "Usage: %s db-file pattern\n", argv[0]);
+        return EXIT_FAILURE;
+    }
 
-    struct list_t *torrents = tpb_parse_and_filter_file("db.xml", filter);
+    struct filter_t *filter = filter_substring_create(argv[2]);
+    struct list_t *torrents = tpb_parse_and_filter_file(argv[1], filter);
 
     struct list_t *it = torrents;
     while (it) {
-        struct torrent_t *torrent = torrents->data;
+        struct torrent_t *torrent = it->data;
 
         puts("---");
         torrent_printf(stdout, torrent);
@@ -25,5 +29,5 @@ int main(int argc, char **argv)
 
     xmlCleanupParser();
 
-    return 0;
+    return EXIT_SUCCESS;
 }
