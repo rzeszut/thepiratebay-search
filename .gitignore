@@ -1,0 +1,12 @@
+# backup trash
+*~
+*.swp
+*.swo
+
+# binaries
+tpb-search
+*.o
+
+# ycm files
+.ycm_extra_conf.py*
+
