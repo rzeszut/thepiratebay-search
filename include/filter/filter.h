@@ -6,13 +6,13 @@
 /**
  * Filter interface.
  */
-struct filter {
-    bool (*match)(struct filter *, const char *);
-    void (*free)(struct filter *);
+struct filter_t {
+    bool (*match)(struct filter_t *, const char *);
+    void (*free)(struct filter_t *);
 };
 
-bool filter_match(struct filter *filter, const char *str);
+bool filter_match(struct filter_t *filter, const char *str);
 
-void filter_free(struct filter *filter);
+void filter_free(struct filter_t *filter);
 
 #endif /* end of include guard: FILTER_H_GPNX9E0J */

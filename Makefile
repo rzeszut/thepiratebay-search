@@ -12,7 +12,11 @@ SOURCES=src/main.c\
 		src/filter_substring.c\
 		src/filter_regex.c\
 		src/list.c\
-		src/torrent.c
+		src/torrent.c\
+		src/parser.c\
+		src/parser_handler_start.c\
+		src/parser_handler_end.c\
+		src/parser_handler_characters.c
 EXECUTABLE=tpb-search
 
 SOURCE_FILES=$(notdir $(SOURCES))

@@ -4,25 +4,19 @@
 #include <stdio.h>
 #include <libxml/xmlmemory.h>
 
-struct torrent_t *torrent_create(const xmlChar *id_str,
-                                 const xmlChar *name,
-                                 const xmlChar *magnet)
-{
-    struct torrent_t *torrent = malloc(sizeof(struct torrent_t));
-
-    // TODO: UTF8 sscanf
-    sscanf((const char *)id_str, "%ld", &torrent->id);
-
-    torrent->name = xmlStrdup(name);
-    torrent->magnet = xmlStrdup(magnet);
-
-    return torrent;
-}
-
 void torrent_free(struct torrent_t *torrent)
 {
-    xmlFree((void *) torrent->name);
+    // free copied strings
+    xmlFree((void *) torrent->title);
     xmlFree((void *) torrent->magnet);
+
     free(torrent);
+}
+
+void torrent_printf(FILE *out, struct torrent_t *torrent)
+{
+    fprintf(out, "Id: %ld\n", torrent->id);
+    fprintf(out, "Title: %s\n", torrent->title);
+    fprintf(out, "Magnet link: %s\n", torrent->magnet);
 }
 
