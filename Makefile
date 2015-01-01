@@ -8,9 +8,7 @@ LDFLAGS=`xml2-config --libs`
 
 SOURCES=src/main.c\
 		src/filter.c\
-		src/filter_glob.c\
 		src/filter_substring.c\
-		src/filter_regex.c\
 		src/list.c\
 		src/torrent.c\
 		src/parser.c\

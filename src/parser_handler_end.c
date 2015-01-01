@@ -15,9 +15,7 @@ static void end_torrent(struct tpb_parser_state_t *state)
         return;
     }
 
-    // TODO: UTF-8 filter
-    bool matched = filter_match(state->filter,
-                                (const char *) state->current_torrent.title);
+    bool matched = filter_match(state->filter, state->current_torrent.title);
     if (matched) {
         // if matched, copy torrent to output list
         struct torrent_t *torrent = malloc(sizeof(struct torrent_t));

@@ -5,7 +5,7 @@
 
 struct filter_substring_t {
     struct filter_t filter;
-    const char *substr;
+    const xmlChar *substr;
 };
 
 struct filter_t *filter_substring_create(const char *substr);
