@@ -3,10 +3,14 @@ SRCDIR=src
 INCDIR=include
 
 CC=gcc
-CCFLAGS=-c -Wall -g -I$(INCDIR) `xml2-config --libs`
+CCFLAGS=-c -Wall -g -I$(INCDIR) `xml2-config --libs` -D_GNU_SOURCE
 LDFLAGS=`xml2-config --cflags`
 
-SOURCES=src/main.c
+SOURCES=src/main.c\
+		src/filter.c\
+		src/filter_glob.c\
+		src/filter_substring.c\
+		src/filter_regex.c
 EXECUTABLE=tpb-search
 
 SOURCE_FILES=$(notdir $(SOURCES))
