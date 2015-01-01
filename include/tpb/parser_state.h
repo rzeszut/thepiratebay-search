@@ -27,7 +27,7 @@ struct tpb_parser_state_t {
     enum tpb_xml_state parser_state;
 
     /** Currently parsed torrent's data. */
-    struct torrent_t current_torrent;
+    struct tpb_torrent_t current_torrent;
 
     /** Torrent filter. */
     struct filter_t *filter;
@@ -42,8 +42,8 @@ struct tpb_parser_state_t {
     bool invalid_state_error;
 };
 
-void transfer_state(struct tpb_parser_state_t *state,
-                    enum tpb_xml_state from,
-                    enum tpb_xml_state to);
+void tpb_transfer_state(struct tpb_parser_state_t *state,
+                        enum tpb_xml_state from,
+                        enum tpb_xml_state to);
 
 #endif /* end of include guard: PARSER_STATE_H_6SFIWXHN */

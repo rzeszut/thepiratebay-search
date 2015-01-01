@@ -4,9 +4,9 @@
 #include <stdio.h>
 #include <libxml/xmlmemory.h>
 
-void torrent_free(void *t)
+void tpb_torrent_free(void *t)
 {
-    struct torrent_t *torrent = t;
+    struct tpb_torrent_t *torrent = t;
 
     // free copied strings
     xmlFree((void *) torrent->title);
@@ -15,10 +15,11 @@ void torrent_free(void *t)
     free(torrent);
 }
 
-void torrent_printf(FILE *out, struct torrent_t *torrent)
+void tpb_torrent_printf(FILE *out, struct tpb_torrent_t *torrent)
 {
-    fprintf(out, "Id: %ld\n", torrent->id);
-    fprintf(out, "Title: %s\n", torrent->title);
-    fprintf(out, "Magnet link: %s\n", torrent->magnet);
+    fprintf(out, "---\n");
+    fprintf(out, "id: %ld\n", torrent->id);
+    fprintf(out, "title: %s\n", torrent->title);
+    fprintf(out, "magnet-link: magnet:?xt=urn:btih:%s\n", torrent->magnet);
 }
 

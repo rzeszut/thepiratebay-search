@@ -15,16 +15,14 @@ int main(int argc, char **argv)
 
     struct list_t *it = torrents;
     while (it) {
-        struct torrent_t *torrent = it->data;
-
-        puts("---");
-        torrent_printf(stdout, torrent);
+        struct tpb_torrent_t *torrent = it->data;
+        tpb_torrent_printf(stdout, torrent);
 
         it = it->next;
     }
-    puts("---");
+    puts("...");
 
-    list_free_with_data(torrents, torrent_free);
+    list_free_with_data(torrents, tpb_torrent_free);
     filter_free(filter);
 
     xmlCleanupParser();

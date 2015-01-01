@@ -29,7 +29,7 @@ struct list_t *tpb_parse_and_filter_file(const char *path,
     } else {
         fprintf(stderr, "Error\n");
         // in case of errors free all results
-        list_free_with_data(state.torrents, torrent_free);
+        list_free_with_data(state.torrents, tpb_torrent_free);
         // TODO: free current_torrent data as well?
 
         return NULL;

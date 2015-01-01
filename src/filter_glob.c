@@ -3,7 +3,7 @@
 #include <stdlib.h>
 #include <fnmatch.h>
 
-static bool filter_glob_match(struct filter_t *filter, const char *str)
+static bool filter_glob_match(struct filter_t *filter, const xmlChar *str)
 {
     struct filter_glob_t *filter_glob = (struct filter_glob_t *) filter;
     return fnmatch(filter_glob->pattern, str, FNM_CASEFOLD) == 0;

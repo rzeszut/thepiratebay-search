@@ -6,22 +6,22 @@
 
 static void start_torrent(struct tpb_parser_state_t *state)
 {
-    transfer_state(state, NONE, INSIDE_TORRENT);
+    tpb_transfer_state(state, NONE, INSIDE_TORRENT);
 }
 
 static void start_id(struct tpb_parser_state_t *state)
 {
-    transfer_state(state, INSIDE_TORRENT, INSIDE_ID);
+    tpb_transfer_state(state, INSIDE_TORRENT, INSIDE_ID);
 }
 
 static void start_title(struct tpb_parser_state_t *state)
 {
-    transfer_state(state, INSIDE_TORRENT, INSIDE_TITLE);
+    tpb_transfer_state(state, INSIDE_TORRENT, INSIDE_TITLE);
 }
 
 static void start_magnet(struct tpb_parser_state_t *state)
 {
-    transfer_state(state, INSIDE_TORRENT, INSIDE_MAGNET);
+    tpb_transfer_state(state, INSIDE_TORRENT, INSIDE_MAGNET);
 }
 
 void tpb_on_start_element(void *s,
