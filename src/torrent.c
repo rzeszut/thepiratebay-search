@@ -4,8 +4,10 @@
 #include <stdio.h>
 #include <libxml/xmlmemory.h>
 
-void torrent_free(struct torrent_t *torrent)
+void torrent_free(void *t)
 {
+    struct torrent_t *torrent = t;
+
     // free copied strings
     xmlFree((void *) torrent->title);
     xmlFree((void *) torrent->magnet);

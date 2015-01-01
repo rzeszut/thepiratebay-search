@@ -5,6 +5,7 @@
 
 /**
  * Filter interface.
+ * TODO: UTF-8 filter
  */
 struct filter_t {
     bool (*match)(struct filter_t *, const char *);

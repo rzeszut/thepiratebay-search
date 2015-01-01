@@ -13,7 +13,8 @@ struct torrent_t {
     long id;
 };
 
-void torrent_free(struct torrent_t *torrent);
+/** Accepts void * because is passed as an argument to list_free_with_data */
+void torrent_free(void *torrent);
 
 void torrent_printf(FILE *out, struct torrent_t *torrent);
 

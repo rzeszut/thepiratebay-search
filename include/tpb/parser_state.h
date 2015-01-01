@@ -34,6 +34,16 @@ struct tpb_parser_state_t {
 
     /** Return value list containing all torrent matching given filter. */
     struct list_t *torrents;
+
+    /**
+     * Flag set to true when state machine went into invalid state
+     * during parsing, or xml parsing error happened.
+     */
+    bool invalid_state_error;
 };
+
+void transfer_state(struct tpb_parser_state_t *state,
+                    enum tpb_xml_state from,
+                    enum tpb_xml_state to);
 
 #endif /* end of include guard: PARSER_STATE_H_6SFIWXHN */

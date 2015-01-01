@@ -10,6 +10,9 @@ tpb-search
 # xmls
 *.xml
 
+# perl scripts for xml creation
+*.pl
+
 # ycm files
 .ycm_extra_conf.py*
 

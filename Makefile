@@ -14,6 +14,8 @@ SOURCES=src/main.c\
 		src/list.c\
 		src/torrent.c\
 		src/parser.c\
+		src/parser_state.c\
+		src/parser_handlers.c\
 		src/parser_handler_start.c\
 		src/parser_handler_end.c\
 		src/parser_handler_characters.c

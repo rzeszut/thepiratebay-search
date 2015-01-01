@@ -6,29 +6,29 @@
 
 static void start_torrent(struct tpb_parser_state_t *state)
 {
-    // TODO
+    transfer_state(state, NONE, INSIDE_TORRENT);
 }
 
 static void start_id(struct tpb_parser_state_t *state)
 {
-    // TODO
+    transfer_state(state, INSIDE_TORRENT, INSIDE_ID);
 }
 
 static void start_title(struct tpb_parser_state_t *state)
 {
-    // TODO
+    transfer_state(state, INSIDE_TORRENT, INSIDE_TITLE);
 }
 
 static void start_magnet(struct tpb_parser_state_t *state)
 {
-    // TODO
+    transfer_state(state, INSIDE_TORRENT, INSIDE_MAGNET);
 }
 
 void tpb_on_start_element(void *s,
                           const xmlChar *name,
                           const xmlChar **attrs)
 {
-    struct tpb_parser_state_t *state = (struct tpb_parser_state_t *) s;
+    struct tpb_parser_state_t *state = s;
 
     if (is_element(name, "torrent")) {
         start_torrent(state);
@@ -39,7 +39,7 @@ void tpb_on_start_element(void *s,
     } else if (is_element(name, "magnet")) {
         start_magnet(state);
     } else {
-        // TODO: handle unknown nodes
+        // TODO: handle unknown nodes -- for extended format
     }
 }
 
