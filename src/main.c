@@ -1,5 +1,5 @@
-#include "filter/filter.h"
 #include "filter/filter_substring.h"
+#include "filter/filter_glob.h"
 #include "tpb/torrent_print.h"
 #include "tpb/parser.h"
 
@@ -24,13 +24,15 @@ enum output_type get_output_type(const char *str)
 }
 
 enum filter_type {
-    SUBSTRING
+    SUBSTRING, GLOB
 };
 
 enum filter_type get_filter_type(const char *str)
 {
     if (strcmp(str, "substring") == 0) {
         return SUBSTRING;
+    } else if (strcmp(str, "glob") == 0) {
+        return GLOB;
     } else {
         fputs("Invalid filter type provided. Using defaul: substring.", stderr);
         return SUBSTRING;
@@ -56,8 +58,10 @@ static void print_usage(const char *program_name) {
     fputs("                 this makes the application print either XML in the tpb archive\n", stderr);
     fputs("                 format or human-readable YAML. Defaults to YAML output.\n", stderr);
     fputs("  -f FILTER_TYPE, --filter-type=FILTER_TYPE\n", stderr);
-    fputs("                 Type of filter expression. As of now can only be 'substring'.\n", stderr);
-    fputs("                 Defaults to substring matching.\n", stderr);
+    fputs("                 Type of filter expression. Supported filter operation types\n", stderr);
+    fputs("                 are 'substring' and 'glob'. First checks whether torrent title\n", stderr);
+    fputs("                 contains passed sutring, second evaluates glob expresion, e.g.\n", stderr);
+    fputs("                 '*gogol?bordello*'. Defaults to substring matching.\n", stderr);
 }
 
 static bool process_optional_arguments(struct program_options_t *opts,
@@ -139,6 +143,9 @@ static struct filter_t *create_filter(struct program_options_t *opts)
     switch (opts->filter_type) {
     case SUBSTRING:
         return filter_substring_create(opts->filter_expression);
+
+    case GLOB:
+        return filter_glob_create(opts->filter_expression);
 
     default:
         // should never happen

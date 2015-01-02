@@ -3,12 +3,49 @@
 #include <stdlib.h>
 #include <fnmatch.h>
 
+static bool is_empty(const xmlChar *str)
+{
+    return (str == NULL) || (*str == 0);
+}
+
+static bool equals_xml_char(const xmlChar *ch1,
+                            const xmlChar *ch2)
+{
+    // TODO: case-insensitive comparison
+    return xmlUTF8Charcmp(ch1, ch2) == 0;
+}
+
+static bool glob_match(const xmlChar *pattern, const xmlChar *input)
+{
+    if (is_empty(pattern) && is_empty(input)) return true;
+
+    if (*pattern == '?')
+        return !is_empty(input) &&
+            glob_match(pattern + 1, xmlUTF8Strpos(input, 1));
+
+    if (*pattern == '*')
+        return glob_match(pattern + 1, input) ||
+            (!is_empty(input) &&
+             glob_match(pattern, xmlUTF8Strpos(input, 1)));
+
+    if (*pattern == '+')
+        return !is_empty(input) &&
+            (glob_match(pattern, xmlUTF8Strpos(input, 1)) ||
+             glob_match(pattern + 1, xmlUTF8Strpos(input, 1)));
+
+    if (*pattern == '\\')
+        return !is_empty(++pattern) &&
+            equals_xml_char(pattern, input) &&
+            glob_match(pattern + 1, xmlUTF8Strpos(input, 1));
+
+    return equals_xml_char(pattern, input) &&
+        glob_match(pattern + 1, xmlUTF8Strpos(input, 1));
+}
+
 static bool filter_glob_match(struct filter_t *filter, const xmlChar *str)
 {
     struct filter_glob_t *filter_glob = (struct filter_glob_t *) filter;
-    // TODO: write glob function for UTF-8 xmlChar * strings.
-    // fnmatch segfaults on strlen(), which tries to access 0x0.
-    return fnmatch(filter_glob->pattern, (const char *) str, FNM_CASEFOLD) == 0;
+    return glob_match(filter_glob->pattern, str);
 }
 
 static void filter_glob_free(struct filter_t *filter)
@@ -22,7 +59,7 @@ struct filter_t *filter_glob_create(const char *pattern)
 
     filter->filter.match = filter_glob_match;
     filter->filter.free = filter_glob_free;
-    filter->pattern = pattern;
+    filter->pattern = (const xmlChar *) pattern;
 
     return (struct filter_t *) filter;
 }

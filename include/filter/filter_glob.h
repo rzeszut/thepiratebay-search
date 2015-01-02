@@ -5,7 +5,7 @@
 
 struct filter_glob_t {
     struct filter_t filter;
-    const char *pattern;
+    const xmlChar *pattern;
 };
 
 struct filter_t *filter_glob_create(const char *pattern);
