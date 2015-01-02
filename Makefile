@@ -7,10 +7,12 @@ CCFLAGS=-c -Wall -g -I$(INCDIR) `xml2-config --cflags` -D_GNU_SOURCE
 LDFLAGS=`xml2-config --libs`
 
 SOURCES=src/main.c\
+		src/list.c\
+		src/xml.c\
 		src/filter.c\
 		src/filter_substring.c\
-		src/list.c\
 		src/torrent.c\
+		src/torrent_print.c\
 		src/parser.c\
 		src/parser_state.c\
 		src/parser_handlers.c\

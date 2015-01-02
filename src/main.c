@@ -1,6 +1,6 @@
 #include "filter/filter.h"
 #include "filter/filter_substring.h"
-#include "tpb/torrent.h"
+#include "tpb/torrent_print.h"
 #include "tpb/parser.h"
 
 #include <stdio.h>
@@ -24,18 +24,11 @@ int main(int argc, char **argv)
     }
 
     struct filter_t *filter = filter_substring_create(argv[1]);
+
     struct list_t *torrents = tpb_parse_and_filter_file(in, filter);
-
-    struct list_t *it = torrents;
-    while (it) {
-        struct tpb_torrent_t *torrent = it->data;
-        tpb_torrent_printf(stdout, torrent);
-
-        it = it->next;
-    }
-    puts("...");
-
     fclose(in);
+
+    tpb_xml_print_torrents(stdout, torrents);
 
     list_free_with_data(torrents, tpb_torrent_free);
     filter_free(filter);

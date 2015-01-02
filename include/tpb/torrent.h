@@ -16,6 +16,4 @@ struct tpb_torrent_t {
 /** Accepts void * because is passed as an argument to list_free_with_data */
 void tpb_torrent_free(void *torrent);
 
-void tpb_torrent_printf(FILE *out, struct tpb_torrent_t *torrent);
-
 #endif /* end of include guard: TORRENT_H_RJH8EAOW */
