@@ -6,7 +6,9 @@
 static bool filter_glob_match(struct filter_t *filter, const xmlChar *str)
 {
     struct filter_glob_t *filter_glob = (struct filter_glob_t *) filter;
-    return fnmatch(filter_glob->pattern, str, FNM_CASEFOLD) == 0;
+    // TODO: write glob function for UTF-8 xmlChar * strings.
+    // fnmatch segfaults on strlen(), which tries to access 0x0.
+    return fnmatch(filter_glob->pattern, (const char *) str, FNM_CASEFOLD) == 0;
 }
 
 static void filter_glob_free(struct filter_t *filter)

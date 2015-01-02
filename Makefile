@@ -11,6 +11,7 @@ SOURCES=src/main.c\
 		src/xml.c\
 		src/filter.c\
 		src/filter_substring.c\
+		src/filter_glob.c\
 		src/torrent.c\
 		src/torrent_print.c\
 		src/parser.c\
