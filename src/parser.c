@@ -14,25 +14,62 @@ static xmlSAXHandler tpb_sax_handler = {
     .fatalError = tpb_on_error
 };
 
-struct list_t *tpb_parse_and_filter_file(const char *path,
+static struct tpb_parser_state_t *prepare_state(struct filter_t *filter)
+{
+    struct tpb_parser_state_t *state = malloc(sizeof(struct tpb_parser_state_t));
+    memset(state, 0, sizeof(struct tpb_parser_state_t));
+
+    state->filter = filter;
+    state->invalid_state_error = false;
+
+    return state;
+}
+
+struct list_t *tpb_parse_and_filter_file(FILE *in,
                                          struct filter_t *filter)
 {
-    // initialize parser state
-    struct tpb_parser_state_t state;
-    memset(&state, 0, sizeof(state));
-    state.filter = filter;
-    state.invalid_state_error = false;
+    char buffer[1024];
+    int cread = 0;
 
-    int ret = xmlSAXUserParseFile(&tpb_sax_handler, &state, path);
-    if (ret == 0) {
-        return state.torrents;
-    } else {
-        fprintf(stderr, "Error\n");
-        // in case of errors free all results
-        list_free_with_data(state.torrents, tpb_torrent_free);
-        // TODO: free current_torrent data as well?
+    struct tpb_parser_state_t *state = NULL;
+    struct list_t *result = NULL;
+    xmlParserCtxtPtr parser_context = NULL;
 
-        return NULL;
+    cread = fread(buffer, sizeof(char), 1024, in);
+    if (cread <= 0) {
+        goto exit;
     }
+
+    state = prepare_state(filter);
+    parser_context = xmlCreatePushParserCtxt(
+        &tpb_sax_handler, state, buffer, cread, NULL
+    );
+
+    while ((cread = fread(buffer, sizeof(char), 1024, in)) > 0) {
+        if (xmlParseChunk(parser_context, buffer, cread, 0)) {
+            xmlParserError(parser_context, "Error while reading XML chunk.");
+            goto exit;
+        }
+
+        if (state->invalid_state_error) {
+            fputs("Invalid parser state error.", stderr);
+            goto exit;
+        }
+    }
+    xmlParseChunk(parser_context, buffer, 0, 1);
+
+    // results found
+    result = state->torrents;
+
+exit:
+    if (state) {
+        if (!result) {
+            list_free_with_data(state->torrents, tpb_torrent_free);
+            // TODO: free current_torrent data as well?
+        }
+        free(state);
+    }
+    if (parser_context) xmlFreeParserCtxt(parser_context);
+    return result;
 }
 

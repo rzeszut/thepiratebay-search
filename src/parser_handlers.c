@@ -13,6 +13,7 @@ void tpb_on_error(void *s,
                   const char *msg, ...)
 {
     struct tpb_parser_state_t *state = s;
+    // TODO: maybe remove?
     state->invalid_state_error = true;
 
     va_list args;
