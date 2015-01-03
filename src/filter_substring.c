@@ -7,6 +7,7 @@ static bool filter_substring_match(struct filter_t *filter, const xmlChar *str)
 {
     struct filter_substring_t *filter_substr =
         (struct filter_substring_t *) filter;
+    // TODO boyer-moore string search algorithm?
     return xmlStrcasestr(str, filter_substr->substr) != NULL;
 }
 

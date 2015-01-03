@@ -2,17 +2,36 @@
 
 #include <stdlib.h>
 #include <fnmatch.h>
+#include <ctype.h>
 
-static bool is_empty(const xmlChar *str)
+inline static bool is_empty(const xmlChar *str)
 {
     return (str == NULL) || (*str == 0);
 }
 
-static bool equals_xml_char(const xmlChar *ch1,
-                            const xmlChar *ch2)
+inline static bool equals_utf8_char(const xmlChar *c1,
+                                    const xmlChar *c2)
 {
-    // TODO: case-insensitive comparison
-    return xmlUTF8Charcmp(ch1, ch2) == 0;
+    int size = xmlUTF8Size(c1);
+
+    while (size-- > 0 && *c2 != 0)
+        if (*c1++ != *c2++)
+            return false;
+
+    return true;
+}
+
+static bool equals_xml_char(const xmlChar *c1,
+                            const xmlChar *c2)
+{
+    const bool c1_empty = is_empty(c1);
+    const bool c2_empty = is_empty(c2);
+
+    if (c1_empty && c2_empty) return true;
+    if (c1_empty || c2_empty) return false;
+
+    return tolower(*c1) == tolower(*c2) ||
+        equals_utf8_char(c1, c2);
 }
 
 static bool glob_match(const xmlChar *pattern, const xmlChar *input)
