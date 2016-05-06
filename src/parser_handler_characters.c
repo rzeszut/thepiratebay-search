@@ -2,17 +2,13 @@
 #include "tpb/parser_state.h"
 
 #include <libxml/xmlmemory.h>
-
-#define is_element(name, element) \
-    (xmlStrcmp((name), (const xmlChar *) (element)) == 0)
+#include <stdlib.h>
 
 static void inside_id(struct tpb_parser_state_t *state,
                       const xmlChar *str, int str_len)
 {
-    const xmlChar *id_str = xmlStrndup(str, str_len);
-    // TODO: UTF-8 sscanf
-    sscanf((const char *) id_str, "%ld", &state->current_torrent.id);
-    xmlFree((void *) id_str);
+    // safe to use because str contains only numbers
+    state->current_torrent.id = strtol((const char *) str, NULL, 10);
 }
 
 static void inside_title(struct tpb_parser_state_t *state,

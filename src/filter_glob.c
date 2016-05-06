@@ -21,13 +21,9 @@ inline static bool equals_utf8_char(const xmlChar *c1,
     return true;
 }
 
-static bool equals_xml_char(const xmlChar *c1,
-                            const xmlChar *c2)
+static bool equals_xml_char(const xmlChar *c1, const xmlChar *c2,
+                            bool c1_empty, bool c2_empty)
 {
-    const bool c1_empty = is_empty(c1);
-    const bool c2_empty = is_empty(c2);
-
-    if (c1_empty && c2_empty) return true;
     if (c1_empty || c2_empty) return false;
 
     return tolower(*c1) == tolower(*c2) ||
@@ -36,28 +32,31 @@ static bool equals_xml_char(const xmlChar *c1,
 
 static bool glob_match(const xmlChar *pattern, const xmlChar *input)
 {
-    if (is_empty(pattern) && is_empty(input)) return true;
+    const bool pattern_empty = is_empty(pattern);
+    const bool input_empty = is_empty(input);
+
+    if (pattern_empty && input_empty) return true;
 
     if (*pattern == '?')
-        return !is_empty(input) &&
+        return !input_empty &&
             glob_match(pattern + 1, xmlUTF8Strpos(input, 1));
 
     if (*pattern == '*')
         return glob_match(pattern + 1, input) ||
-            (!is_empty(input) &&
+            (!input_empty &&
              glob_match(pattern, xmlUTF8Strpos(input, 1)));
 
     if (*pattern == '+')
-        return !is_empty(input) &&
+        return !input_empty &&
             (glob_match(pattern, xmlUTF8Strpos(input, 1)) ||
              glob_match(pattern + 1, xmlUTF8Strpos(input, 1)));
 
     if (*pattern == '\\')
         return !is_empty(++pattern) &&
-            equals_xml_char(pattern, input) &&
+            equals_xml_char(pattern, input, pattern_empty, input_empty) &&
             glob_match(pattern + 1, xmlUTF8Strpos(input, 1));
 
-    return equals_xml_char(pattern, input) &&
+    return equals_xml_char(pattern, input, pattern_empty, input_empty) &&
         glob_match(pattern + 1, xmlUTF8Strpos(input, 1));
 }
 

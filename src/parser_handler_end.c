@@ -5,9 +5,6 @@
 #include <string.h>
 #include <libxml/xmlmemory.h>
 
-#define is_element(name, element) \
-    (xmlStrcmp((name), (const xmlChar *) (element)) == 0)
-
 static void end_torrent(struct tpb_parser_state_t *state)
 {
     tpb_transfer_state(state, INSIDE_TORRENT, NONE);

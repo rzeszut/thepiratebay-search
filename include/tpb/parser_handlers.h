@@ -2,6 +2,12 @@
 #define PARSER_HANDLERS_H_WCHVCT7F
 
 #include <libxml/parser.h>
+#include <string.h>
+
+// name is a proper ascii string anyway, it does not contain any
+// extended utf8 characters
+#define is_element(name, element) \
+    (strcmp((const char *)(name), (element)) == 0)
 
 void tpb_on_start_element(void *state,
                           const xmlChar *name,
